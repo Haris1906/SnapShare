@@ -34,7 +34,7 @@ const UserCard = ({ user }: UserCardProps) => {
       unfollow({ userId: currentUser.id, followingId: user.$id });
     }
   }
-  if (user.$id === currentUser.id) return null;
+
   return (
     <Link to={`/profile/${user.$id}`} className="user-card">
       <img

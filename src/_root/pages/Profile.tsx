@@ -46,7 +46,7 @@ const Profile = () => {
 
   const { mutate: follow, isPending: isLoading1 } = useFolowerUser();
   const { mutate: unfollow, isPending: isLoading2 } = UseunFolowerUser();
-  const { data: userdata, isPending } = useGetUserById(id);
+  const { data: userdata, isPending } = useGetUserById(id || "");
   function handleClick() {
     if (!isfollowing) {
       console.log("follow");
