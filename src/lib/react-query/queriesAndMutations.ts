@@ -17,6 +17,7 @@ import {
   getInfinitePosts,
   getPostsById,
   getRecentPosts,
+  getRecentPostsofFollowing,
   getUserById,
   getUsers,
   likePost,
@@ -68,6 +69,13 @@ export const useGetRecentPosts = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
     queryFn: () => getRecentPosts(),
+  });
+};
+
+export const useGetRecentPostsbyFollowing = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_RECENT_POSTS_FOLLOWING],
+    queryFn: () => getRecentPostsofFollowing(userId),
   });
 };
 
@@ -253,6 +261,10 @@ export const useFolowerUser = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, user.id],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS_FOLLOWING],
+      });
     },
   });
 };
@@ -274,6 +286,10 @@ export const UseunFolowerUser = () => {
 
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS_FOLLOWING],
       });
     },
   });

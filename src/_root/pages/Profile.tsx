@@ -46,6 +46,7 @@ const Profile = () => {
 
   const { mutate: follow, isPending: isLoading1 } = useFolowerUser();
   const { mutate: unfollow, isPending: isLoading2 } = UseunFolowerUser();
+  const { data: userdata, isPending } = useGetUserById(id);
   function handleClick() {
     if (!isfollowing) {
       console.log("follow");
@@ -56,7 +57,7 @@ const Profile = () => {
     }
   }
 
-  if (!currentUser)
+  if (!currentUser || isPending)
     return (
       <div className="flex-center w-full h-full">
         <Loader />
@@ -86,8 +87,8 @@ const Profile = () => {
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={currentUser.posts.length} label="Posts" />
-              <StatBlock value={20} label="Followers" />
-              <StatBlock value={20} label="Following" />
+              <StatBlock value={userdata?.followers.length} label="Followers" />
+              <StatBlock value={userdata?.following.length} label="Following" />
             </div>
 
             <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">

@@ -1,11 +1,24 @@
 import Loader from "@/components/shared/Loader";
 import PostCard from "@/components/shared/PostCard";
-import { useGetRecentPosts } from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthContext";
+import { useGetRecentPostsbyFollowing } from "@/lib/react-query/queriesAndMutations";
 import { Models } from "appwrite";
 
 const Home = () => {
-  const { data: posts, isPending: isPostLoading } = useGetRecentPosts();
+  const { user } = useUserContext();
+  const { data: posts, isPending: isPostLoading } =
+    useGetRecentPostsbyFollowing(user.id);
   console.log(posts?.documents);
+  if (!posts?.documents.length) {
+    return (
+      <div className="flex flex-1">
+        <div className="home-container h3-bold">No posts to show</div>
+      </div>
+    );
+  }
+  if (isPostLoading) {
+    return <Loader />;
+  }
   return (
     <div className="flex flex-1">
       <div className="home-container">

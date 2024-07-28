@@ -505,3 +505,26 @@ export async function unfollowUser(
     console.error(error);
   }
 }
+
+export async function getRecentPostsofFollowing(userId: string) {
+  const currentuser = await getUserById(userId);
+  const followingIds = currentuser?.following;
+  const posts = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.postCollectionId,
+    [
+      // Filter by posts of users in followingIds array
+      Query.equal("creator", [...followingIds]),
+      Query.orderDesc("$createdAt"),
+      Query.limit(20),
+    ]
+  );
+
+  console.log(posts);
+
+  if (!posts) {
+    throw new Error("Failed to fetch posts.");
+  }
+
+  return posts;
+}
