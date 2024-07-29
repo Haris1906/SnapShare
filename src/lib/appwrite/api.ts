@@ -509,6 +509,7 @@ export async function unfollowUser(
 export async function getRecentPostsofFollowing(userId: string) {
   const currentuser = await getUserById(userId);
   const followingIds = currentuser?.following;
+  if (followingIds.length === 0) return { documents: [] };
   const posts = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,

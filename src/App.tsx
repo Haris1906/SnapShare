@@ -19,7 +19,10 @@ import { Toaster } from "@/components/ui/toaster";
 
 const App = () => {
   return (
-    <main className="flex h-screen">
+    <main className="flex h-screen relative">
+      <div className="absolute left-11 top-0">
+        <Toaster />
+      </div>
       <Routes>
         <Route element={<AuthLayout />}>
           <Route path="/sign-in" element={<SigninForm />} />
@@ -37,7 +40,6 @@ const App = () => {
           <Route path="/update-profile/:id" element={<UpdateProfile />} />
         </Route>
       </Routes>
-      <Toaster />
     </main>
   );
 };

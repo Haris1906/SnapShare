@@ -21,10 +21,12 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
+import { useState } from "react";
 
 const SigninForm = () => {
   const { toast } = useToast();
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const { mutateAsync: signInAccount } = useSignInAccount();
@@ -39,12 +41,14 @@ const SigninForm = () => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
+    setIsSubmitting(true);
     const session = await signInAccount({
       email: values.email,
       password: values.password,
     });
 
     if (!session) {
+      setIsSubmitting(false);
       return toast({
         title: "Sign in failed. Please try again",
       });
@@ -54,7 +58,10 @@ const SigninForm = () => {
     if (isLoggedIn) {
       form.reset();
       navigate("/");
+      setIsSubmitting(false);
+      return toast({ title: "Sign in successfull" });
     } else {
+      setIsSubmitting(false);
       return toast({ title: "Sign in failed. Please try again" });
     }
   }
@@ -99,7 +106,7 @@ const SigninForm = () => {
             )}
           />
           <Button type="submit" className="shad-button_primary">
-            {isUserLoading ? (
+            {isUserLoading || isSubmitting ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading...
               </div>

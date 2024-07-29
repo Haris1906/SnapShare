@@ -19,6 +19,13 @@ const AllUsers = () => {
 
     return;
   }
+  if (isLoading) {
+    return (
+      <div className="pt-[100px]">
+        <Loader />;
+      </div>
+    );
+  }
   const creators = creators1?.documents.filter(
     (creator) => creator.$id !== user.id
   );

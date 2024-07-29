@@ -6,9 +6,17 @@ import { Models } from "appwrite";
 
 const Home = () => {
   const { user } = useUserContext();
-  const { data: posts, isPending: isPostLoading } =
+  const { data: posts, isLoading: isPostLoading } =
     useGetRecentPostsbyFollowing(user.id);
-  console.log(posts?.documents);
+
+  if (isPostLoading) {
+    return (
+      <div className="pt-[100px]">
+        <Loader />;
+      </div>
+    );
+  }
+
   if (!posts?.documents.length) {
     return (
       <div className="flex flex-1">
@@ -16,9 +24,7 @@ const Home = () => {
       </div>
     );
   }
-  if (isPostLoading) {
-    return <Loader />;
-  }
+
   return (
     <div className="flex flex-1">
       <div className="home-container">
